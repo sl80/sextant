@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>maintenance mode</title>
+    <style type='text/css'>
+    body, html {
+        height:100%; /*fill the viewport*/
+        background-color:#000;
+        color:#555;
+        font-family: Arial, Helvetica, sans-serif; font-size: 24px;
+    }
+    #container{
+        height:100%; /*fill the body*/
+        text-align: center; /*H-centering in early IE versions*/
+    }
+    #pinac {
+        width: 500px;
+        height: 425px;
+        position:relative; /*allows for top property to move the element*/
+        top:50%; /*moves it 50% of #container's height down the page*/
+        margin-top:-198px; /*pulls it back up by half it's height*/
+        margin-left: auto;margin-right: auto; /*H-centering in complaint browsers*/
+        background:#000;
+        color:#444;
+    }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="pinac">
+            <img src="/images/partenon.jpg" alt="Flickr: CCC by saikofish"/>
+            <br>
+            Sorry. Der Piraten-Sextant ist wegen Wartungsarbeiten vor&uuml;bergehend 
+            nicht verfügbar.
+        </div>
+    </div>
+</body>
+</html>

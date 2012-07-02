@@ -1,0 +1,16 @@
+Das Feld "Phase" legt fest, ob ein Meinungsbild sichtbar ist und welche Operationen mit ihm möglich sind:
+* 0 = Unsichtbar, in Vorbereitung
+* 1 = Sammlung
+* 2 = Abstimmung
+* 3 = Abgeschlossen
+* Alle anderen = Unsichtbar, Archiv
+
+Du wirst für gewöhnlich das Meinungsbild 
+* in (0) entwerfen, 
+* dann zur weiteren Sammlung auf (1) umstellen, 
+* nach einer angemessenen Zeit in (0) die Vorschläge redaktionell bearbeiten, 
+* mit dem Wechsel auf (2) für die Abstimmung freischalten und 
+* schließlich mit (3) beenden.
+* Zum abschliessenden Aufräumen wird das Meinungsbild gelöscht oder auf (4) geetzt.
+
+**ACHTUNG!** Nach der ersten Stimmabgabe in Phase 2 dürfen die Optionen nicht mehr ergänzt oder in ihrer Reihenfolge verändert werden!

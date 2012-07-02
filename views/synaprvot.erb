@@ -1,0 +1,98 @@
+<% 	p = YAML.load( @q.topics_yml )
+	# p["themen"]
+	@o = Opinion.find_or_create(:user_id => session[:user_id], :questionaire_id => @q.id)
+%>
+<h1><%= @q.name %></h1>
+
+<% if not p["text"].nil? %>
+<div class="rounded" style="background:<%= cc(2) %>;"><div style="padding: 0 1.2em 0 1.2em;">
+	<b><%= RedCloth.new(linkify(p["text"])).to_html %></b>
+</div></div>
+<% end %>
+<% count = Opinion.filter(:questionaire_id => @q.id, ~:valid => nil).count %>
+<b><%= count %> Meinung<%= count == 1 ? '' : 'en' %> abgegeben.
+Stand vom <%= $tn.strftime("%d.%m.%Y %H:%M:%S") %>. <%= help(6) %></b><br>
+<% if !@o.modified_at.nil? %>
+	<%= @o.modified_at.strftime("Deine letzte Stimmabgabe war am %d.%m.%Y um %H:%M:%S.") %><br>
+<% end %>
+
+
+<% if !p["verdeckt"].nil? && @q.phase == 2 %>
+	Dies ist eine verdeckte Abstimmung. Die Ergebnisse sind erst nach Abschluß der Abstimmungsphase sichtbar.
+<% else %>
+
+	<div id="help6" class="rounded help"><%= helptext(6) %></div>
+	
+	<table class="sortable" style="width:100%" cellspacing="0">
+		<tr>
+			<th class="sorttable_nosort">Nr.</th>
+			<th class="sorttable_nosort">Option (Spalten mit * sind sortierbar)</th>
+				<th align="center" style="width:40px;">Ja*</th>
+				<th align="center" style="width:40px;">Nein*</th>
+				<th align="center" style="width:40px;">Egal*</th>
+				<th align="center" style="width:40px;">Z*</th>
+				<!--th align="right" style="width:40px;">Q2</th-->
+			<th class="sorttable_nosort"style="width:80px;"></th>
+  </tr>
+
+	<%	
+	h = Array.new()
+	BearStr = Struct.new(:nr, :yes, :no, :any, :q1, :q2, :max)
+	Opinion.filter(:questionaire_id => @q.id, :valid => true).each{|r| 
+		oarr = eval(r.opinion_arr)
+		for i in 0..oarr.length-1
+			v = oarr[i].to_i
+			h[i] ||= BearStr.new
+			h[i].nr = i
+			if    v == 3 ; h[i].yes = h[i].yes.nil? ? 1 : h[i].yes+1
+			elsif v == 2 ; h[i].no  = h[i].no.nil?  ? 1 : h[i].no+1
+			else           h[i].any = h[i].any.nil? ? 1 : h[i].any+1
+			end
+		end
+	}
+	h.each {|r|
+		r.yes = r.yes.nil? ? 0 : r.yes.to_f
+		r.no = r.no.nil? ? 0 : r.no.to_f
+		r.any = r.any.nil? ? 0 : r.any.to_f
+		r.q1 = (r.yes + r.no) == 0 ? 0 : r.yes / (r.yes + r.no) * 100
+		r.q2 = (r.yes + r.no + r.any) == 0 ? 0 : r.yes / (r.yes + r.no+r.any) *100
+	}
+	
+	pxfak = 75.0 / h.collect{|hi| [hi.yes, hi.no, hi.any].max}.max
+	# h = h.sort{|a,b| (a.yes+a.no+a.any) <=> (b.yes+b.no+b.any) }.reverse
+	# pxfak = 80.0 / (h[0].yes+h[0].no+h[0].any)
+	h = h.sort{|a,b| a.q1 <=> b.q1 }.reverse
+	ln = 0
+	for i in 0..p["themen"].length-1
+		if p["themen"][i] !~ /^h\. /
+			ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+		%>
+	<tr>
+		<td class="<%= lmrk %>"><%= i + 1 %>.</td>
+		<td class="<%= lmrk %>"><%= linkify(wouid(p["themen"][h[i].nr])) %></td>
+		<td align="right" class="<%= lmrk %>"><%= h[i].yes.to_i %></td>
+		<td align="right" class="<%= lmrk %>"><%= h[i].no.to_i %></td>
+		<td align="right" class="<%= lmrk %>"><%= h[i].any.to_i %></td>
+		<td align="right" class="<%= lmrk %>"><%= "%.0f\%" % h[i].q1 %></td>
+		<!--td class="<%= lmrk %>"><%= "%.0f\%" % h[i].q2 %></td-->
+		<td class="<%= lmrk %>">
+			<%# mxo = mx; mx = [t[1], mxo].max; px = (t[1].to_f / mx.to_f)*100.0 %><hr id="red" 
+			style="height:.5em; background-color:steelblue; color:steelblue; margin:0; padding:0;text-align:left; width: <%= h[i].yes * pxfak %>px"/>
+
+<hr id="blue" 
+			style="height:.5em; background-color:salmon; color:salmon; margin:0; padding:0;text-align:left; width: <%= h[i].no * pxfak %>px"/>
+<hr id="blue" 
+			style="height:.5em; background-color:#aaa; color:#aaa; margin:0; padding:0;text-align:left; width: <%= h[i].any * pxfak %>px"/>
+		</td>
+	</tr>	
+	<%	end end 
+	 %>
+	</table>
+	<i>* Zustimmung Z = J / (J + N)</i>
+	<% if not p["email"].nil? %>
+	<br>
+	<img src="/images/mail.png"> 
+	<a href='mailto:<%= p["email"] %>'>Email an den Initiator dieser Umfrage schreiben</a>
+	<% end %>
+	<br>(Für Techniker: <a href="/export/<%= @q.id %>">Export der Rohdaten</a>)
+<% end %>

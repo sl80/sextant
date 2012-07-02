@@ -1,0 +1,36 @@
+<script>
+function confirmDelete(delUrl) {
+  if (confirm("Wirklich löschen?")) {
+    document.location = delUrl;
+  }
+}
+</script>
+
+<h1>Verwalten von Meinungsbildern <%= help(10) %></h1>
+<div id="help10" class="help"><%= helptext(10) %></div>
+<a href="/admin_add">Neues Meinungsbild</a>
+<br>
+<div id='pageNavPosition'></div><hr>
+<table id="pgtabelle">
+	<tr><th ALIGN=LEFT >Titel des Meinungsbildes</th><th>MBereich</th><th>Phase</th><th>Edt</th><th>Pre</th><th>Erg</th><th>Del</th></tr>
+	<% Questionaire.order_by(:phase).each{|r| 
+			if user_acl.split(",").include?(r.scope)
+	%>
+		<tr>
+			<td><%= r.name %></td>
+			<td><%= r.scope %></td>
+			<td><%= r.phase %></td>
+			<td><a href="/admin_edit/<%= r.id %>">Edt</a></td>
+			<td><a href="/bear/<%= r.id %>">Pre</a></td>
+			<td><a href="/synopsis/<%= r.id %>">Erg</a></td>
+			<td><a href="javascript:confirmDelete('/admin_del/<%= r.id %>')">Del</a></td>
+		</tr>
+	<% end
+	} %>
+</table>
+<script type="text/javascript">
+	var pager = new Pager('pgtabelle', 10); 
+	pager.init(); 
+	pager.showPageNav('pager', 'pageNavPosition'); 
+	pager.showPage(1);
+</script>

@@ -1,0 +1,17 @@
+<div style="background: #ffc;border-width:1px;border-style:solid;padding:1.2em;">
+h3. 4. Januar 2010
+
+Nach einer kleinen Verzögerung lebt die OpenID-Authentifizierung und der Betatest kann losgehen. Wenn alles wie geplant klappt, dann können wir die Piraten am 11.1. auf den Sextanten loslassen :-) 
+</div>
+
+h3. 18. Dezember 2010
+
+Der OpenID-Server soll am Wochenende fertig werden. Dann kann in der Weihnachtswoche der Feature-Freeze und der letzte Betatest stattfinden. In Hannover haben sich reichlich freiwillige Tester gefunden. Danke schon mal.
+
+h3. 17. Dezember 2009
+
+Der Bundesvorstand hat beschlossen, ein Tool zur Durchführung von Meinungsbildern zu suchen. Dazu werden im ersten Quartal '10 unser Sextant und das Berliner Tool 'Liquid Feedback' einem ausführlichen Praxistest unterzogen. 
+
+h3. 10. Dezember 2009
+
+Unser Authentifizierungs-Datensicherheits-Problem ist gelöst: Der NDS-Vorstand hat sich bereit erklärt, kurzfristig einen OpenID-Server aufzusetzen. Danke, Jens! Danke, Arne!

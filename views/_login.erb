@@ -1,0 +1,50 @@
+<!--img src="/images/logonds.jpg"/-->
+
+<% if logged_in? %>
+<div class="rounded" style="background-color:<%= cc(1) %>;"><div style="padding:5px;">
+	<h1>Hallo, <%= User[session[:user_id]].longname %>!</h1>
+	Mitglied in: <%= user_acl %><br>
+	(<%= link_to("Logout", "/logout") %>)
+</div></div>
+	<%= partial :sidebar %>
+<% else %>
+<!--h3>Piraten-Login</h3-->
+<div class="rounded" style="background-color:<%= cc(1) %>;"><div style="padding:5px;">
+	<form class="openid_login" method="post" accept-charset="UTF-8" action='/oidlogin'>
+		<label for="openid_server">Dein OpenID-Server:</label>
+		<% d = oidsrv(:list) %>
+		<select name="openid_server" style="width:180px" size="<%= d.length %>">
+		<% for i in 0..(d.length-1) %>
+        <option value="<%= i %>" <%= i == 0 ? "selected" : "" %>><%= d[i] %></option>
+        <% end %>
+    	</select>
+		<br>
+		<label for="openid_identifier">ID oder Benutzername</label>
+		<input type="text" name="openid_identifier" 
+		style="background: url(http://openid.net/images/login-bg.gif) no-repeat #FFF 5px; padding-left: 25px; width:150px;" /><p></p>
+		<center><input type="submit" class="btn" value="Login" /></center>
+		<br><a href="/text/loginprobs">Probleme beim Login?</a>
+	</form>
+</div></div>
+<!--p><hr><p>
+<h3>Admin-Login</h3>
+	<form action="/login" method="POST">
+	    <p>Benutzer: <br><input type="text" name="name" value="<%= @email %>"/></p>
+	    <p>Password: <br><input type="password" name="password" value=""/></p>
+	    <p><input type="submit" value="Login"/></p>
+	</form-->
+
+<% end %>
+<br>
+<div class="rounded" style="background-color:<%= cc(1) %>;"><div style="padding:5px;">
+<h1>Lesestoff</h1>
+<ul>
+	<!--li><a href="/text/antraglpt09">Antrag zum LPT09</a></li-->
+	<li><a href="/text/help">Hilfe</a></li>
+	<!--li><a href="/text/index">Startseite</a></li-->
+	<!--li><a href="/text/news">Die letzten Neuigkeiten</a></li-->
+	<li><a href="/text/design">Design für Vertrauen</a></li>
+	<li><a href="/text/technik">Technik</a></li>
+	<li><a href="/text/faq">FAQs</a></li>
+</ul>
+</div></div>

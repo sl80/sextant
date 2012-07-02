@@ -1,0 +1,15 @@
+<% if State[1].motd != "" %><div class="rounded" style="background:#ffffcc;"><div style="padding:1.2em;"><%= State.first.motd %></div></div><% end %>
+Was brauchen Piraten zur Positionsbestimmung? Genau: Einen "Sextanten":http://de.wikipedia.org/wiki/Sextant.
+
+h1. Der Piraten-Sextant ...
+
+... ist ein  Tool zur Meinungsbildung in 3 einfachen Schritten:
+
+# Phase: Die Initiatoren geben eine Reihe möglicher Optionen vor.
+# Phase: Die Community fügt ggf. weitere Optionen hinzu.
+# Phase: In einer Abstimmung wird die Priorität der Optionen basisdemokratisch festgelegt.
+
+In der Sextanten-Datenbank sind und werden keine persönlichen Daten der Teilnehmer abgelegt. Du identifizierst dich als Pirat durch deine OpenID. <%= help(11) %>
+<div id="help11" class="rounded help"><%= helptext(11) %></div>
+
+

@@ -1,0 +1,9 @@
+$gmailconfig = {
+	:server=>'imap.gmail.com', 
+	:port=>'993', 
+	:username=>'pp.sextant', 
+	:fullusername=>'pp.sextant@googlemail.com', 
+	:password=>'ABCDEFG'
+}
+
+$adminmail = "Dana.Scully@fbi.gov"

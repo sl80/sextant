@@ -1,0 +1,1 @@
+Auf der Adminseite kannst du neue Meinungsbilder anlegen, sowie bestehende bearbeiten oder löschen. Du hast dabei nur Zugriff auf Meinungsbilder, die zu deinen Mitgliedsbereichen gehören (z.B. L:NDS und KV:WOB). 

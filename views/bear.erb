@@ -1,0 +1,193 @@
+<%
+def opn(n)
+	@o.opinion_arr.nil? ? "" : eval(@o.opinion_arr)[n]
+end
+
+yamlok = true
+begin
+	p = YAML.load( @q.topics_yml )
+rescue
+	yamlok = false
+%>
+Die Einstellungen für die Umfrage <b>"<%= @q.name %>"</b> sind fehlerhaft.
+<%
+end
+if yamlok
+
+pp = p["punkte"]
+%>
+
+<script>
+function total(o) {
+	var f=document.forms[0];
+	var sum = 0;
+	for(i=0; i<f.elements.length; i++){
+		if(f[i].name != "q" && f[i].type != "submit" && !isNaN(parseInt(f[i].value))) {
+			sum = sum + parseInt(f[i].value);
+		};
+	};
+	if(sum <= <%= pp %>) {
+		document.getElementById("total").innerHTML = sum;	
+	} else {
+		document.getElementById("total").innerHTML = "<font color='red'>" + sum + "</font>";	
+	};
+}
+</script>
+
+<h1><%= @q.name %></h1>
+
+<% if not p["text"].nil? %>
+	<div class="rounded" style="background-color:<%= cc(2) %>;"><div style="padding: 0 1.2em 0 1.2em;">
+<b><%= RedCloth.new(linkify(p["text"])).to_html %></b></div></div>
+<% end %>
+
+<% if @q.phase == 1 %>
+	<h4>Derzeitige Liste der Optionen:<%= help(1) %></h4>
+	<div id="help1" class="rounded help"><%= helptext(1) %></div>
+	<% if not p["paging"].nil? %>
+		<div id='pageNavPosition'></div><hr>
+	<% end %>
+	<table id="pgtabelle" width="100%" cellspacing="0">
+	<tr><th ALIGN=LEFT >Option</th></tr>
+	<%# p["themen"].each {|t| 
+		if t =~ /^h\. /
+	%>
+	<% ln = 0; for i in (0..p["themen"].length-1) 
+		t = p["themen"][i]
+		if t =~ /^\"*h\. / 
+
+	%>
+		<tr><td><h4><%= linkify(t.sub(/^h\. /, '')) %></h4></td></tr>
+	<% else 
+		  if / #\[\[.*\]\]#/.match(t.to_s)
+			  text = t.to_s.gsub(/ #\[\[.*\]\]#/, "")
+			  uid = t.to_s.strip.gsub(/.*#\[\[/, "").gsub(/\]\]#/, "").to_i
+		  else
+		  	  text = t.to_s
+		  	  uid = nil
+	  	  end
+			ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+	%>
+		<tr><td class="<%= lmrk %>"><%= linkify(text) %>
+			<% if !uid.nil? %>
+				<% if uid == current_user.id %>
+					<a href="/bear_adddel?q=<%= @q.id %>&line=<%= i %>"><img src="/images/trash.png"></a>
+				<% end %>
+			<% end%>
+		</td></tr>
+	<% end
+	end %>
+	</table>
+	<form action="/bear_add" method="POST">
+	<p/><b>Fehlt in dieser Übersicht eine wichtige Option?</b><br>
+	<input name="new" value='' size=80/>
+	<input type="submit" class="btn" value="Hinzufügen"/>
+	<div id="urlinfo" class="rounded helpvis"><div style="padding:1.2em;">
+		URLs im Text, die mit www. oder http:// beginnen und von Klammern "()" oder Leerzeichen 
+		"&nbsp;" umgeben sind, werden in clickable Links umgewandelt.
+	</div></div>
+
+	<input name="q" type="hidden" value="<%= @q.id %>"/>
+	</form>
+<% end
+if @q.phase != 1 # == 2 
+ %>
+	<form action="/bear_vote" method="POST">
+	<table width="100%">
+		<tr>
+			<td>
+		<% if p["approvot"].nil? %>
+			<h4>Bitte verteile zusammen genau <%= pp %> Punkt<%= pp == 1 ? '' : 'e' %> 
+				(derzeit <span id="total"></span>): <%= help(2) %></h4>
+		<% end %>
+			</td>
+			<td align=right><input type="submit" class="btn" value="Meinung speichern"/></td>
+		</tr>
+	</table>
+	<div id="help2" class="rounded help"><%= helptext(2) %></div>
+	<% if not p["paging"].nil? %>
+		<div id='pageNavPosition'></div><hr>
+	<% end %>
+	<table id="pgtabelle" width="100%" cellspacing="0">
+		<tr>
+			<th ALIGN=LEFT>Option</th>
+			<% if p["approvot"].nil? %>
+				<th align="right">Punkte</th>
+			<% else %>
+				<th align="center" style="width:50px;">Ja</th>
+				<th align="center" style="width:50px;">Nein</th>
+				<th align="center" style="width:50px;">Egal</th>
+		<% end %>
+		</tr>
+	<% ln = 0; for i in (0..p["themen"].length-1) 
+		t = p["themen"][i]
+		# lmrk = (i.divmod(1)[2] == 0) ? "" : "style='border-bottom:1px dotted; border-color:#ddd;'"
+		#lmrk = "style='border-bottom:1px dotted; border-color:#ddd;'"
+		#lmrkr = "style='border-bottom:1px dotted; border-color:#ddd;text-align:right'"
+		if t =~ /^\"*h\. / 
+	%>
+	<tr>
+		<td><h4><%= linkify(t.sub(/^\"*h\. /, '')) %></h4></td>
+	</tr>
+	<% else 
+				ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+
+	%>
+	<tr>
+		<td  class="<%= lmrk %>"><%= linkify(wouid(t)) %></td>
+		<% if p["approvot"].nil? %>
+			<td  class="<%= lmrk %>" align="right"><input name="t_<%= i %>" value='<%= opn(i) %>' size=4 onkeyup="total();"/></td>	
+		<% else %>
+			<td align="center" class="<%= lmrk %>" ><input type="radio" name="t_<%= i %>" value="3" <%= "checked" if opn(i) == 3 %>></td>
+			<td align="center" class="<%= lmrk %>" ><input type="radio" name="t_<%= i %>" value="2" <%= "checked" if opn(i) == 2 %>></td>
+			<td align="center" class="<%= lmrk %>" ><input type="radio" name="t_<%= i %>" value="1" <%= "checked" if opn(i) == 1 %>></td>
+		<% end %>
+	</tr>
+	<% end %>
+
+	<% end %>
+		<% if p["approvot"].nil? %>
+	<tr>
+		<td></td>
+		<td align=right><input type="submit" class="btn" value="Meinung speichern"/></td>
+	</tr>
+		<% end %>
+	</table>	
+
+	<input name="q" type="hidden" value="<%= @q.id %>"/>
+	</form>
+	<table width="100%">
+		<tr><td align=left>
+			<% if !@o.modified_at.nil? %>
+				<%= @o.modified_at.strftime("Letzter Zugriff am %d.%m.%Y um %H:%M:%S.") %>
+			<% end %>
+		</td><td align=right>
+			<form action="/bear_del" method="POST">
+				<input name="q" type="hidden" value="<%= @q.id %>"/>
+				<input type="submit" class="btn" value="Meinung löschen"/>
+			</form>
+		</td></tr>
+	</table>
+	
+	<script>total();</script>
+	
+<% end %>
+
+<% if not p["paging"].nil? %>
+    <script type=<"text/javascript">
+        var pager = new Pager('pgtabelle', <%= p["paging"].to_i %>); 
+        pager.init(); 
+        pager.showPageNav('pager', 'pageNavPosition'); 
+        pager.showPage(1);
+    </script>
+<% end %>
+
+<% if not p["email"].nil? %>
+<br>
+<img src="/images/mail.png"> 
+<a href='mailto:<%= p["email"] %>'>Email an den Initiator dieser Umfrage schreiben</a>
+<% end 
+end
+%>
+
+<%#= @o.inspect %>

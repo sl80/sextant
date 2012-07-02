@@ -1,0 +1,15 @@
+h1. Redaktionelle Bearbeitung
+
+In der Phase I - Sammeln der Optionen - habt Ihr die Punkte zusammengetragen, die Euch im Licht der beiden Fragen (Aktionen, Diskussionen) wichtig sind.
+
+Wie schon angekündigt hat die _AG Sextant_ (mit Unterstützung des Hannoveraner Regionsstammtisches) nach Abschluß der Phase I die Ergebnisse behutsam redaktionell bearbeitet. Dabei haben wir die einzelnen Punkte nach den folgenden Kriterien untersucht:
+
+* Clustern: In der Sammlungsphase haben die Optionen natürlich keine thematische Ordnung. Der Übersichtlichkeit halber haben wir die Optionen unter Zwischenüberschriften gruppiert.
+
+* Passt der Punkt zur Fragestellung? Wir haben uns für Punkte aus _Diskussionen_ jeweils gefragt "Könnte man  theoretisch dazu eine AG gründen?". Für _Aktionen_ war die Frage "Könnte man theoretisch unter dieser Überschrift eine Demo organisieren?".
+
+* Klarheit: Wir können nicht über Punkte abstimmen, die unterschiedlich verstanden werden. Wir wollten möglichst wenig interpretierend eingreifen und haben daher Punkte, die offensichtlich unklar sind, herausgenommen.
+
+* Dubletten: Wir haben häufig nicht nur identische, sondern auch eng verwandte Punkte unter einem Oberbegriff zusammengefasst (z.B. verschiedene Formen des Grundeinkommens zu "Grundeinkommen"). Diese Zusammenfassung wertet das Thema auf, da in der Abstimmung Stimmen, die sich sonst auf mehrere Punkte verteilen, nun auf einem Punkt konzentriert werden. Andererseits haben wir auf die Zusammenfassung verzichtet, wo zu vermuten war, daß die Punkte unter Piraten trotzdem als voneinander getrennt betrachtet werden.
+
+* Nachvollziehbarkeit: "Hier":/NDS_1und2.zip befindt sich eine ZIP-Datei, in der zu _Aktionen_ und _Diskussionen_ die Originallisten und Endfassung als PDF-, TXT- und Freemind-Dateien enthalten sind. Wer also gern den nicht immer einfachen Bearbeitungsprozess nachvollziehen möchte, dem wünschen wir viel Vergnügen bei der Lektüre.

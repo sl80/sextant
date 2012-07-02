@@ -1,0 +1,8 @@
+This allows you to skip the output of the style when using scaffold auto
+completing.  This is necessary if you want to be XHTML compliant, as style tags
+aren't allowed inside form elements.
+
+To use this, add the .css file to your layout. Then set this in your
+application's environment:
+
+  ScaffoldingExtensions.auto_complete_skip_style = true

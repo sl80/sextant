@@ -1,0 +1,7 @@
+rack --version 1.0.0
+sequel --version 3.0.0
+sinatra --version 0.9.2
+tlsmail --version 0.0.1
+ruby-openid --version 2.1.7
+ya2yaml --version 0.26
+google_visualization --version 0.5.0

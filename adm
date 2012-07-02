@@ -1,0 +1,52 @@
+#!/bin/env ruby
+
+#  heroku db:pull sqlite://meine.db
+
+def c(cmd)
+	print "\n===> #{cmd}\n"
+	system(cmd)
+end
+
+def zipme
+	c("rm public/pp-sextant.tar.gz")
+	ign = File.read("./.gitignore")
+	files = Dir.entries(".").reject!{|d|
+		d == "." ||
+		d == ".." ||
+		d == "config.rb" ||
+		d == ".git" ||
+		d == ".gitignore" ||
+		ign.include?(d)
+	}
+	c("tar czvf dont_deploy/pp-sextant.tar.gz #{files.join(' ')}")
+	c("mv dont_deploy/pp-sextant.tar.gz public/pp-sextant.tar.gz")
+end
+
+def deploy
+	c "git add ."
+	c "git commit -m '.'"
+	c "git push heroku"
+end
+
+while true
+	print "\x1b[2J"
+	print "0. Maintenance ON'\n"
+	print "1. Maintenance OFF'\n"
+	print "R. run 'ruby main.rb'\n"
+	print "Z. ZIP sources\n"
+	print "D. Deploy\n"
+	print "L. Logfile\n"
+	print "\nQ  Quit\n\n: "
+	ans = gets
+	case ans.strip.downcase
+		when 'z' : zipme
+		when 'd' : deploy
+		when 'r' : c("ruby  main.rb")
+		when 'l' : c("heroku logs | less")
+		when '0' : c("heroku maintenance:on")
+		when '1' : c("heroku maintenance:off")
+		when 'q' : exit
+	end
+	print "Weiter mit <ENTER>"
+	gets
+end

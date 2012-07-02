@@ -1,0 +1,2 @@
+Nach der redaktionellen Überarbeitung wird die Liste der Optionen zur Abstimmung freigegeben. Du hast z.B. 10 Punkte, die du beliebig verteilen kannst. Ob du einer sehr wichtigen Option 10 Punkte gibst oder deine Punkte auf bis zu 10 Optionen verteilst, bleibt dir überlassen. _Es werden allerdings nur Stimmen mit der **korrekten Gesamtpunktezahl** gezählt._ 
+Du mußt nicht in jedes Feld einen Wert eintragen - leere Felder werden als "0" gezählt.

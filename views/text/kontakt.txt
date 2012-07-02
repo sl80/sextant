@@ -1,0 +1,3 @@
+h1. Kontakt i.S.d. "V.i.S.d.P."
+
+<img src="/images/kontakt.bmp"/>

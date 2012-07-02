@@ -1,0 +1,92 @@
+<style>
+/* Sortable tables */
+table.sortable thead {
+    background-color:#bbb;
+    font-weight: bold;
+    cursor: default;
+}
+td { vertical-align:top; }
+</style>
+<% 	p = YAML.load( @q.topics_yml )
+	# p["themen"]
+	@o = Opinion.find_or_create(:user_id => session[:user_id], :questionaire_id => @q.id)
+%>
+<h1><%= @q.name %></h1>
+
+<% if not p["text"].nil? %>
+<div class="rounded" style="background:<%= cc(2) %>;"><div style="padding: 0 1.2em 0 1.2em;">
+	<b><%= RedCloth.new(linkify(p["text"])).to_html %></b>
+</div></div>
+<% end %>
+<% count = Opinion.filter(:questionaire_id => @q.id, ~:valid => nil).count %>
+<b><%= count %> Meinung<%= count == 1 ? '' : 'en' %> abgegeben. Davon
+<%= Opinion.filter(:questionaire_id => @q.id, :valid => true).count %> gültige.
+Stand vom <%= $tn.strftime("%d.%m.%Y %H:%M:%S") %>. <%= help(6) %></b><br>
+<% if !@o.modified_at.nil? %>
+	<%= @o.modified_at.strftime("Deine letzte Stimmabgabe war am %d.%m.%Y um %H:%M:%S.") %><br>
+<% end %>
+
+<% if !p["verdeckt"].nil? && @q.phase == 2 %>
+	Dies ist eine verdeckte Abstimmung. Die Ergebnisse sind erst nach Abschluß der Abstimmungsphase sichtbar.
+<% else %>
+	<a href="/gvis/<%= @q.id %>/15">Alternativdarstellung: Ergebnis nach Anteilen</a><br>
+
+	<div id="help6" class="rounded help"><%= helptext(6) %></div>
+	
+	<table class="sortable" style="width:100%" cellspacing="0">
+		<tr>
+			<th class="sorttable_nosort">Nr.</th>
+			<th class="sorttable_nosort">Option (Spalten mit * sind sortierbar)</th>
+			<th >Pkt*</th>
+			<th>Mng*</th>
+			<th>P/M*</th>
+			<th class="sorttable_nosort">Pkt | Mng</th>
+  </tr>
+
+	<%	syn = Hash.new()
+		nsyn = Hash.new()
+		Opinion.filter(:questionaire_id => @q.id, :valid => true).each{|r| 
+			oarr = eval(r.opinion_arr)
+			
+			for i in 0..oarr.length-1
+				syn[i] = syn[i].nil? ? oarr[i].to_i : syn[i] + oarr[i].to_i
+				nsyn[i] = nsyn[i].to_i
+				if oarr[i].to_i > 0
+					nsyn[i] = nsyn[i].nil? ? 1 : nsyn[i] + 1
+				end
+			end
+		}
+		syn = syn.sort{|a,b| a[1]<=>b[1]}.reverse
+		i = 0
+		mx = 0.0
+		ln = 0
+		syn.each {|t|
+			if p["themen"][t[0]] !~ /^h\. /
+								ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+
+			%>
+	<tr>
+		<td class="<%= lmrk %>"><%= i += 1 %>.</td>
+		<td class="<%= lmrk %>"><%= linkify(wouid(p["themen"][t[0]])) %></td>
+		<td class="<%= lmrk %>"><%= t[1] %></td>
+		<td class="<%= lmrk %>"><%= nsyn[t[0]] %></td>
+		<td class="<%= lmrk %>"><%= "%.1f" % (t[1].to_f / nsyn[t[0]].to_f) %></td>
+		<td class="<%= lmrk %>"><% mxo = mx; mx = [t[1], mxo].max; px = (t[1].to_f / mx.to_f)*100.0 %><hr id="red" 
+			style="height:.8em; background-color:salmon; color:salmon; margin:0; padding:0;text-align:left; width: <%= px %>px"/>
+
+<hr id="blue" 
+			style="height:.8em; background-color:steelblue; color:steelblue; margin:0; padding:0;text-align:left; width: <%= (nsyn[t[0]].to_f / mx.to_f) * 100 %>px"/>
+
+		</td>
+	</tr>	
+	<%	end 
+	} %>
+	</table>
+	<% if not p["email"].nil? %>
+	<br>
+	<img src="/images/mail.png"> 
+	<a href='mailto:<%= p["email"] %>'>Email an den Initiator dieser Umfrage schreiben</a>
+	<% end %>
+	<br>(Für Techniker: <a href="/export/<%= @q.id %>">Export der Rohdaten</a>)
+<% end %>
+<%#= dset.inspect %>

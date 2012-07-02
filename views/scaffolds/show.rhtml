@@ -1,0 +1,36 @@
+<% @scaffold_title = "#{@scaffold_options[:singular_human_name]} anzeigen" %>
+<%# if '' != (edit_link = scaffold_check_link('Bearbeiten', true, "edit_#{@scaffold_options[:singular_name]}", :id=>@scaffold_object.scaffold_id)) %>
+  <!--h4><%#= edit_link %></h4-->
+<%# end %>
+
+<div  class="rectbl">
+<% load "./views/scaffolds/_helpers.rb" %>
+<table><tr>
+	<td><%= icon_edit %></td>
+	<td><%= icon_destroy %></td>
+	<td><%= icon_new %></td>
+	<td><%= icon_search %></td>
+	<td><%= icon_browse %></td>
+</tr></table>
+
+<table id="scaffolded" class="<%= @scaffold_class.scaffold_table_class(:show) %>">
+<!--thead><tr><th>Attribute</th><th>Value</th></tr></thead-->
+<tbody>
+<% @scaffold_class.scaffold_fields(:show).each do |column| %>
+  <tr>
+    <td><%= @scaffold_class.scaffold_column_name(column) %></td><td>:</td>
+    <td <% o = @scaffold_object.local_show_options[column]
+    		if not o.nil? 
+    			o.each {|k,v| %>
+    				<%= "#{k}='#{v}'" %> 
+    		<% } 
+		end %>
+     class="recval"><%=h @scaffold_object.scaffold_value(column).to_s %></td>
+  </tr>
+<% end %>
+</tbody></table>
+
+<%= scaffold_association_links %>
+</div>
+<%#= scaffold_manage_link %>
+

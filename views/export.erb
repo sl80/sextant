@@ -1,0 +1,28 @@
+<% 	p = YAML.load( @q.topics_yml ) 
+	$sep = ";"
+	def es(s)
+		return "NIL" if s.nil?
+		s.to_s.gsub(Regexp::new($sep), " ")
+	end
+	def md5(id) 
+		Digest::MD5.hexdigest("#{id}#{$tn.strftime("%d.%m.%Y")}")
+		# Digest::MD5.hexdigest("#{id}#{(Time.now + 9*60*60).strftime("%d.%m.%Y")}")
+		#"#{id}#{(Time.now + 9*60*60).strftime("%d.%m.%Y")}"
+	end		
+%>
+Rohdaten zum Meinungsbild "<%= @q.name %>"
+Die IDs sind gehasht. Deine ID ist MD5("<%= current_user.name %>" + "<%= (Time.now + 9*60*60).strftime("%d.%m.%Y") %>") = "<%= md5(current_user.name) %>"
+
+Option/ID<% Opinion.filter(:questionaire_id => @q.id).each{|r| %><%= "#{$sep}#{es(md5(r.user.name))}" %><% } %>
+Gültig<% Opinion.filter(:questionaire_id => @q.id).each{|r| %><%= "#{$sep}#{r.valid}" %><% } %>
+
+<% z=0; p["themen"].each {|t| %><%= es(wouid(t)) %><% 
+Opinion.filter(:questionaire_id => @q.id).each{|r| 
+	begin
+		raz = eval(r.opinion_arr)[z]
+	rescue
+		raz = ""
+	end 	
+%><%= "#{$sep}#{ es(raz) if not raz.nil? }" %><% } %>
+<% ; z += 1 } %>
+

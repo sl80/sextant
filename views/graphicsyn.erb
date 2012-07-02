@@ -1,0 +1,62 @@
+<%
+require 'google_visualization'
+
+
+# http://code.google.com/intl/de-DE/apis/visualization/documentation/gallery/piechart.html#Configuration_Options
+# include Google::Visualization
+
+data_table = Google::Visualization::DataTable.new
+data_table.add_column Google::Visualization::DataColumn.new(Google::Visualization::DataType::STRING, 'Option')
+data_table.add_column Google::Visualization::DataColumn.new(Google::Visualization::DataType::NUMBER, 'Punkte')
+p = YAML.load( @q.topics_yml )
+syn = Hash.new()
+nsyn = Hash.new()
+Opinion.filter(:questionaire_id => @q.id, :valid => true).each{|r| 
+	oarr = eval(r.opinion_arr)
+	for i in 0..oarr.length-1
+		syn[i] = syn[i].nil? ? oarr[i].to_i : syn[i] + oarr[i].to_i
+		nsyn[i] = nsyn[i].to_i
+		if oarr[i].to_i > 0
+			nsyn[i] = nsyn[i].nil? ? 1 : nsyn[i] + 1
+		end
+	end
+}
+syn = syn.sort{|a,b| a[1]<=>b[1]}.reverse
+i = 0
+mx = 0.0
+syn.each {|t|
+	if p["themen"][t[0]] !~ /^h\. /
+		data_table.add_row [wouid(p["themen"][t[0]]), t[1]]
+	end 
+} 
+%>
+<!--Load the AJAX API-->
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+// Load the Visualization API and the piechart package.
+google.load('visualization', '1', {'packages':['piechart']});
+
+// Set a callback to run when the Google Visualization API is loaded.
+google.setOnLoadCallback(drawChart);
+
+// Callback that creates and populates a data table,
+// instantiates the pie chart, passes in the data and
+// draws it.
+function drawChart() {
+  // Create our data table.
+  var data = new google.visualization.DataTable(<%= data_table.to_json %>);
+
+  // Instantiate and draw our chart, passing in some options.
+  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  chart.draw(data, {width: 650, height: 350, pieJoinAngle: <%= @s %>, backgroundColor: "<%= cc(6) %>", legendBackgroundColor: "<%= cc(6) %>", is3D: true, legend: "right", legendFontSize: 10, title: 'Ergebnis nach Punkten'});
+}
+</script>
+
+<!--Div that will hold the pie chart-->
+<h1><%= @q.name %></h1>
+<div id="chart_div" style="width:100%;background-color:<%= cc(6) %>;"></div>
+Tortenstücke kleiner als <input size=3 id="gvisscale" value="<%= @s %>"> Grad fließen in "Other/Sonstige" ein. <input type="button" class="btn" value="Anzeigen" onclick="javascript:window.location='/gvis/<%= @q.id %>/' + document.getElementById('gvisscale').value;"/><br>
+
+
+<a href="/synopsis/<%= @q.id %>">(Zurück zur Ergebnisübersicht)</a>

@@ -1,0 +1,15 @@
+h1. Design für Vertrauen 
+
+Wir möchten, dass der _Sextant_ von euch Piraten akzeptiert und zu einem rege genutzten Werkzeug wird. Deshalb haben wir uns beim Entwurf von den folgenden Zielen leiten lassen:
+
+h3. KISS: Keep it simple, stupid!
+
+Die besten Web-Anwendungen tun etwas Einfaches einfach richtig gut. Der _Sextant_ konzentriert sich auf das Wesentliche: _"1. Was sind die Optionen?"_ und _"2. Wie ist die Meinung der Piraten dazu?"_. Auf dem Weg zur Liquid Democracy müssen wir alle Piraten mitnehmen und Meinungsbilder sind der erste Schritt.
+
+h3. Mitgliederdaten verbleiben beim Vorstand
+
+Das OpenID-Verfahren stellt sicher, dass nur der Vorstand Zugriff auf die Mitgliederdaten hat. Jeder Pirat bekommt eine geheime ID und ein geheimes Passwort. _Sextanten_-Umfragen sind dadurch anonym, aber es ist sichergestellt, dass nur Piraten Zugriff darauf haben.
+
+h3. Vertrauen durch Nachvollziehbarkeit
+
+Zu den Umfrageergebnissen sind  jeweils die Rohdaten abrufbar. Damit kann jeder Pirat prüfen, ob seine Stimme korrekt gezählt wurde und ob der _Sextant_ richtig gerechnet hat. Der Vorstand kann prüfen, ob  zusätzliche Stimmen aufgenommen wurden. Die einzige (theoretische) Gefahr wäre, dass der Vorstand zum Zweck der Manipulation zusätzliche Piraten erfindet, aber irgendwem muss man letztlich vertrauen. Und wir vertrauen unserem gewählten Vorstand. Zumal der _Sextant_ nicht für verbindliche Abstimmungen, sondern nur für unverbindliche Meinungsbilder geschaffen wurde und eingesetzt werden sollte.

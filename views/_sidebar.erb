@@ -1,0 +1,31 @@
+<br>
+<div class="rounded" style="background-color:<%= cc(1) %>;"><div style="padding:5px;">
+<h1>Navigation</h1>
+<%
+def mknavlinks(stable, text)
+	s="<table><tr>
+	<td><a href='/app/browse_#{stable}'>#{text}</a></td>
+	</tr></table>"
+	s
+end
+%>
+<ul>
+<% if User[session[:user_id]].is_qadmin %>
+	<li><a href="/admin_index">Meinungsbilder verwalten</a></li>
+	<li><a href="/admin_profile">Mein Profil</a></li>
+	<li><a href="/text/admin_help">Admin-Hilfe</a></li>
+<% end %>
+<% if User[session[:user_id]].is_admin %>
+	<li><a href="/app/index">Alle Modelle</a></li>
+	<li><a href="/app/edit_state?id=1">MOTD</a></li>
+	<li><a href="/app/browse_user">Browser Users</a></li>
+<% end %>
+</ul>
+<!--hr-->
+<% if !User[session[:user_id]].is_qadmin %>
+<ul>
+	<li><a href="/">Meinungsbilder</a></li>
+</ul>
+<% end %>
+</div>
+</div>

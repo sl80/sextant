@@ -1,0 +1,106 @@
+<%
+def voted(q)
+	o = Opinion.find(:user_id => session[:user_id], :questionaire_id => q)
+	if o.nil?
+		"&nbsp;<span style='background-color:#ffe87c;'>NEU !</span>"
+	else
+		if o.valid.nil?
+			"&nbsp;<span style='background-color:#ccc;'>angesehen</span>"
+		else
+			if o.valid == false
+				"&nbsp;<span style='background-color:#faafbe;'>Ungültige Stimme</span>"
+			else
+				"&nbsp;<span style='background-color:#c3fdb8;'>Gültige Stimme</span>"
+			end
+		end
+	end
+end
+
+acl = user_acl.split(',')
+
+%>
+<% @scaffold_title = "Meinungsbilder" %>
+
+<table width="98%" cellspacing="0">	
+<tr><td><h4>... in Phase I - Sammlung <%= help(1) %></h4></td></tr>
+
+<% ln = 0; Questionaire.filter(:phase => 1).each{|r| 
+	if acl.include?(r.scope)
+		ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+%>
+<tr><td class="<%= lmrk %>"><a href="/bear/<%= r.id %>"><%= r.name %></a></td><td class="<%= lmrk %>">[<%= r.scope %>]</td><td class="<%= lmrk %>"></td>
+	<td  class="<%= lmrk %>" align="right"><%= voted(r.id) %></td></tr>
+<% end }%>
+<%= Questionaire.filter(:phase => 1).count == 0 ? "<li>- keine -</li>" : "" %>
+
+<tr><td><h4>... in Phase II - Abstimmung <%= help(2) %></h4></td></tr>
+<% ln = 0; Questionaire.filter(:phase => 2).each{|r| 
+	if acl.include?(r.scope)
+		ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+%>
+<tr>
+	<td class="<%= lmrk %>"><a href="/bear/<%= r.id %>"><%= r.name %></a></td> 
+	<td class="<%= lmrk %>">[<%= r.scope %>]</td>
+	<td class="<%= lmrk %>">
+	<%  yamlok = true
+		begin
+			p = YAML.load( r.topics_yml )
+		rescue
+			yamlok = false
+		end
+		if yamlok
+		if p["verdeckt"].nil? || true %>
+			<% if p["approvot"].nil? %>
+				<a href="/synopsis/<%= r.id %>">Zum Ergebnis</a>
+			<% else %>
+				<a href="/synaprvot/<%= r.id %>">Zum Ergebnis</a>
+			<% end %>
+		<% else %>
+			Verdeckt
+		<% end 
+		else %>
+			Konfigurationsfehler!
+		<% end %>
+	</td>
+	<td  class="<%= lmrk %>" align="right"><%= voted(r.id) %></td>
+</tr>
+<% end }%>
+<%= Questionaire.filter(:phase => 2).count == 0 ? "- keine -" : "" %>
+
+
+<tr><td><h4>... abgeschlossene <%= help(3) %></h4></td></tr>
+<% ln = 0; Questionaire.filter(:phase => 3).each{|r|
+	yamlok = true
+		begin
+			p = YAML.load( r.topics_yml )
+		rescue
+			yamlok = false
+		end
+ 	if acl.include?(r.scope)
+		ln += 1 ; lmrk = (ln.divmod(2)[1] == 0) ? "oze" : "ozo"
+%>
+<tr>
+	<% if !yamlok %>
+	<td class="<%= lmrk %>"><%= r.name %></td>
+	<td class="<%= lmrk %>">[<%= r.scope %>]</td>
+	<td class="<%= lmrk %>">Konfigurationsfehler!</td>
+	<td  class="<%= lmrk %>" align="right"><%= voted(r.id) %></td></tr>
+	<% else
+	   if p["approvot"].nil? %>
+		<td class="<%= lmrk %>"><a href="/synopsis/<%= r.id %>"><%= r.name %></a></td>
+	<% else %>
+		<td class="<%= lmrk %>"><a href="/synaprvot/<%= r.id %>"><%= r.name %></a></td>
+	<% end %>
+	<td class="<%= lmrk %>">[<%= r.scope %>]</td>
+	<% if p["approvot"].nil? %>
+		<td class="<%= lmrk %>"><a href="/synopsis/<%= r.id %>">Zum Ergebnis</a></td>
+	<% else %>
+		<td class="<%= lmrk %>"><a href="/synaprvot/<%= r.id %>">Zum Ergebnis</a></td>
+	<% end %>
+	<td  class="<%= lmrk %>" align="right"><%= voted(r.id) %></td></tr>
+<% end end }%>
+<%= Questionaire.filter(:phase => 3).count == 0 ? "- keine -" : "" %>
+</table>	
+<div id="help1" class="rounded help"><%= helptext(1) %></div>
+<div id="help2" class="rounded help"><%= helptext(2) %></div>
+<div id="help3" class="rounded help"><%= helptext(3) %></div>

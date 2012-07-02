@@ -1,0 +1,18 @@
+h1. Technik
+
+<div class="rounded" style="background:#ffffcc;"><div style="padding:1.2em;">**Achtung:** Nur-Anwender dürfen und sollen diese Seite ohne schlechtes Gewissen komplett ignorieren. Dieser Abschnitt ist nur für den technisch interessierten Piraten gedacht.</div></div>
+
+Der Sextant ("Quelltexte":/pp-sextant.tar.gz) ist eine "Ruby-Anwendung":http://www.ruby-lang.org/de/ und basiert auf dem Framework "Sinatra":http://www.sinatrarb.com/. Die wichtigsten verwendeten Gems sind:
+# "sequel"::http://sequel.rubyforge.org/documentation.html
+# "scaffolding_extensions"::http://github.com/jeremyevans/scaffolding_extensions/tree/master ("Beispiel":http://groups.google.com/group/ramaze/browse_thread/thread/8a9da03f5ed4375f?tvc=2&q=scaffolding)
+# "redcloth"::http://hobix.com/textile/
+# "ruby-openid":http://openidenabled.com/ruby-openid/
+# "tlsmail":http://rubyforge.org/projects/tlsmail/
+
+
+Das Hosting übernimmt "Heroku":http://www.heroku.com. Im Hintergrund nutzt Heroku Amazon EC2 um die benötigte Rechenleistung und den Platz für die POSTGRES Datenbanken bereitzustellen und für die wünschenswerte Ausfallsicherheit zu sorgen. Für das Entwicklungs- und Pflegeteam stehen die Quelltexte als Git-Repository auf den Heroku-Servern zur Verfügung.
+
+Durch das Cloud-Hosting ist die Anwendung sehr einfach (allerdings kostenpflichtig) skalierbar. Wenn Ihr häufiger die Fehlermeldungen "Backlog Too Deep" oder "Request Timeout" bekommt, dann müssen wir da etwas investieren.
+
+* Aktueller "Serverstatus":http://status.heroku.com/ von Heroku.com
+

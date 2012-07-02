@@ -1,0 +1,13 @@
+h1. Frequently Asked Questions
+
+
+# **Kann ich mir einen 'richtigen' Usernamen geben und damit diese kryptischen IDs loswerden?**
+Nein. Es gibt keine persönlichen Profile. Ein grundlegendes Prinzip ist, dass weder der Sextant noch der OpenID-Server des Vorstands irgendwelche Daten enthalten, die einen Rückschluß auf Mitglieder zulassen. Das macht das Leben etwas komplizierter, aber für eine breite Akzeptanz unter teilweise auch kritisch eingestellten Piraten ist dieser Grundsatz unerläßlich.
+# **Kann mich der Sextant bei Freischaltung einer Umfrage per Mail benachrichtigen?**
+Leider Nein. Technisch wär's kein Problem, aber dazu müßte er deine Email-Adresse kennen und das ... (siehe Frage 1). Die Mailbenachrichtigung übernimmt der Initiator der Umfrage (dein KV, LV etc.).
+# **Wer kann ein Meinungsbild initiieren?**
+Jede Organisationseinheit, die a) die Email-Adressen ihrer Mitglieder hat (für Einladungs-Rundmails) und die b) in der Mitgliederverwaltung dem Mitglied zugeordnet werden kann (damit der OpenID-Server die Zugriffsberechtigungen übermitteln kann)
+# **Warum muß ich eine feste Punktzahl vergeben? Könnte man nicht einfach beliebige Punke verteilen und anschließend normalisieren?**
+Könnte man machen. Damit verlöre man aber einige interessante Gestaltungsmöglichkeiten wie z.B. Ja-Nein-Fragen (2 Optionen, 1 Punkt)
+# **Ich finde im Rohdatenexport meine OpenID nicht wieder.**
+Wenn der Sextant deine OpenID ausgeben würde, dann könnte man über die Zeit und nach einigen Umfragen Rückschlüsse auf dein Abstimmverhalten - und damit auf dich - ziehen. Um das zu vermeiden, wird deine OpenID "gehasht". Um deine Meinung wiederzufinden, nimm deine ID und hänge das im Export in Zeile 3 angegebene Datum dran. Das Ergebnis sieht dann z.B. so aus: "4v12hCWwRmXbCGEN07.01.2010". Berechne davon (z.B. "hiermit":http://md5.md/index.php) den MD5-Hashwert und den wirst du dann in der Export-Liste wiederfinden.

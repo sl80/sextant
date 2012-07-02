@@ -1,0 +1,200 @@
+# An example for an OpenID consumer using Sinatra
+
+#require 'rubygems'
+#require 'sinatra'
+gem 'ruby-openid', '>=2.1.2'
+require 'pathname'
+require "openid"
+require 'openid/extensions/sreg'
+require 'openid/extensions/pape'
+require 'openid/store/filesystem'
+
+class OpenIDAuth < Sinatra::Base
+	include Helpers
+	
+	configure do
+		set :sessions => true, :run => false
+	end
+	
+	def openid_consumer
+		@openid_consumer ||= OpenID::Consumer.new(session,
+			# OpenID::Store::Filesystem.new("#{File.dirname(__FILE__)}/tmp/openid"))  
+			OpenID::Store::Filesystem.new("/tmp"))  
+	end
+
+	def root_url
+		request.url.match(/(^.*\/{2}[^\/]*)/)[1]
+	end
+
+  # In a real app, you might want to do something like this 
+  #
+  # enable :sessions 
+  #
+  # Returns true if somebody is logged in  
+  # def logged_in?
+  #   !session[:user].nil?
+  # end
+  #
+  # Visit /logout to log out
+  # get '/logout' do
+  #   session[:user] = nil
+  #   # redirect '/login'
+  # end
+
+  # Send everything else to the super app
+	not_found do
+		if @app
+			@app.call(env)
+		end
+	end
+	
+	get '/login' do    
+		erb :oid_login
+	end
+
+	post '/login/openid' do
+		msg = ""
+		# dir = Pathname.new("./").join('db').join('cstore')
+		# store = OpenID::Store::Filesystem.new(dir)
+		consumer = openid_consumer # OpenID::Consumer.new(session, store)
+		begin
+			identifier = params[:openid_identifier]
+			if identifier.nil?
+				msg += "Enter an OpenID identifier"
+				# redirect_to :action => 'index'
+				return msg
+			end
+			oidreq = consumer.begin(identifier)
+		rescue OpenID::OpenIDError => e
+			msg += "Discovery failed for #{identifier}: #{e}"
+			# redirect_to :action => 'index'
+			return msg
+		end
+		sregreq = OpenID::SReg::Request.new
+		sregreq.request_fields(['email','nickname'], true)
+		sregreq.request_fields(['dob', 'fullname'], false)
+		oidreq.add_extension(sregreq)
+		oidreq.return_to_args['did_sreg'] = 'y'
+		papereq = OpenID::PAPE::Request.new
+		papereq.add_policy_uri(OpenID::PAPE::AUTH_PHISHING_RESISTANT)
+		papereq.max_auth_age = 2*60*60
+		oidreq.add_extension(papereq)
+		oidreq.return_to_args['did_pape'] = 'y'
+		# oidreq.return_to_args['force_post']='x'*2048
+		if oidreq.send_redirect?(root_url, root_url + "/login/openid/complete", params[:immediate])
+			redirect oidreq.redirect_url(root_url, 
+				root_url + "/login/openid/complete", params[:immediate])
+			# redirect_to oidreq.redirect_url(root_url, root_url + "/login/openid/complete", params[:immediate])
+		else
+			oidreq.html_markup(root_url, 
+				root_url + "/login/openid/complete", params[:immediate], {'id' => 'openid_form'})
+		end
+	
+=begin    
+	begin
+	oidreq = openid_consumer.begin(openid)
+	rescue OpenID::DiscoveryFailure => why
+	"Sorry, we couldn't find your identifier '#{openid}'"
+	else
+	# You could request additional information here - see specs:
+	# http://openid.net/specs/openid-simple-registration-extension-1_0.html
+	# oidreq.add_extension_arg('sreg','required','nickname')
+	# oidreq.add_extension_arg('sreg','optional','fullname, email')
+	
+	# Send request - first parameter: Trusted Site,
+	# second parameter: redirect target
+	redirect oidreq.redirect_url(root_url, root_url + "/login/openid/complete")
+	end
+=end    
+	end
+
+	get '/login/openid/complete' do
+		msg = ""
+		oidresp = openid_consumer.complete(params, request.url)
+		case oidresp.status
+		when OpenID::Consumer::FAILURE
+			if oidresp.display_identifier
+				msg += "Verification of #{oidresp.display_identifier} failed: #{oidresp.message}"
+			else
+				msg += "Verification failed: #{oidresp.message}"
+			end
+		when OpenID::Consumer::SUCCESS
+			msg += "Verification of #{oidresp.display_identifier} succeeded."
+		if params[:did_sreg]
+			sreg_resp = OpenID::SReg::Response.from_success_response(oidresp)
+			sreg_message = "Simple Registration data was requested"
+			if sreg_resp.empty?
+				sreg_message << ", but none was returned."
+			else
+				sreg_message << ". The following data were sent:"
+				sreg_resp.data.each {|k,v|
+					sreg_message << "<br/><b>#{k}</b>: #{v}"
+				}
+			end
+			# puts sreg_message
+			# flash[:sreg_results] = sreg_message
+		end
+		if params[:did_pape]
+			pape_resp = OpenID::PAPE::Response.from_success_response(oidresp)
+			pape_message = "A phishing resistant authentication method was requested"
+			if pape_resp.auth_policies.member? OpenID::PAPE::AUTH_PHISHING_RESISTANT
+				pape_message << ", and the server reported one."
+			else
+				pape_message << ", but the server did not report one."
+			end
+			if pape_resp.auth_time
+				pape_message << "<br><b>Authentication time:</b> #{pape_resp.auth_time} seconds"
+			end
+			if pape_resp.nist_auth_level
+				pape_message << "<br><b>NIST Auth Level:</b> #{pape_resp.nist_auth_level}"
+			end
+			# puts pape_message
+			# flash[:pape_results] = pape_message
+		end
+		when OpenID::Consumer::SETUP_NEEDED
+			msg += "Immediate request failed - Setup Needed"
+		when OpenID::Consumer::CANCEL
+			msg += "OpenID transaction cancelled."
+		else
+		end
+		msg.inspect + sreg_message.inspect + pape_message.inspect
+	end
+
+=begin
+      when OpenID::Consumer::SETUP_NEEDED
+        "Immediate request failed - Setup Needed"
+
+      when OpenID::Consumer::CANCEL
+        "Login cancelled."
+
+      when OpenID::Consumer::SUCCESS
+        # Access additional informations:
+        #puts "::::" + params['openid.sreg.nickname']
+        #puts "::::" + params['openid.sreg.fullname']   
+        
+        # Startup something
+        "Login successfull."  
+        # Maybe something like
+        # session[:user] = User.find_by_openid(oidresp.display_identifier)
+#        puts oidresp.display_identifier
+    end
+=end
+end
+
+=begin
+$myapp = Rack::Builder.app do
+    map("/")	{run OpenIDAuth}
+end
+
+if not ENV['DATABASE_URL']
+	Rack::Handler.get('webrick').run($myapp, :Host=>'0.0.0.0', :Port=>4567) do |server|
+	    trap(:INT){server.stop}
+	end
+end
+
+
+__END__
+
+@@ login
+
+=end

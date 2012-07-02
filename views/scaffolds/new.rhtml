@@ -1,0 +1,19 @@
+<% @scaffold_title = "#{@scaffold_options[:singular_human_name]} anlegen" %>
+
+<div  class="rectbl">
+<% load "./views/scaffolds/_helpers.rb" %>
+<table><tr>
+	<td><%= icon_search %></td>
+	<td><%= icon_browse %></td>
+</tr></table>
+	
+	
+<%= scaffold_model_form('create', @scaffold_class.scaffold_fields(:new)) %>
+
+
+<% @scaffold_object.values.each {|k, v| sa = k.to_s.split('_'); if sa[1]=="id" %> 
+<a href="/app/edit_<%= sa[0] %>/<%= v %>">Zum Kopf</a>
+<% end } %>
+</div>
+
+<%#= scaffold_manage_link %>

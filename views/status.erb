@@ -1,0 +1,5 @@
+__FILE__ = <%= __FILE__ %><br>
+storedir = <%= ENV['DATABASE_URL'].nil? ? "/tmp" : ENV['HOME'].sub(/\/tmp\/home\/$/, '/tmp') %>
+<hr>
+ENV = <%= ENV.inspect %>
+<hr>

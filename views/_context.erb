@@ -1,0 +1,21 @@
+<!--img src="/images/alphastar.jpg" style="position:fixed; right:5px; top:75px;"/-->
+<!--img src="http://wiki.piratenpartei.de/images/2/2c/Logo_13_1.png"/-->
+<img src="/images/logonds.jpg"/>
+<p>&nbsp;<p/>
+<h1>Externe Links</h1>
+<ul>
+	<li><a href="http://web.piratenpartei.de/" target="_blank">Piratenpartei (Bund)</a></li>
+	<li><a href="http://www.piratenpartei-niedersachsen.de/" target="_blank">Piraten Niedersachsen</a></li>
+	<li><a href="http://wiki.piratenpartei.de" target="_blank">Piratenwiki</a></li>
+	<!--li><a href="http://pst-hannover.de" target="_blank">Stammtisch Hannover</a></li-->
+</ul>
+
+
+<% begin
+	arr = request.path_info.split('/')
+	recop = arr[1].split('_')
+	recop[2] = arr.size > 2 ? arr[2].to_i : 0
+	@recop, @recls, @recid = recop
+%>
+<%=  partial "context_#{@recls}".to_sym %>
+<% rescue; end %>

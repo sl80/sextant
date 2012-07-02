@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<%	
+  title = "Der Piraten-Sextant" 
+  version = "0.9.5"
+%>
+<html>
+    <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<% sitename = ENV['DATABASE_URL'].nil? ? "localhost:4567" : ENV['PSDOM'] %>
+	<meta http-equiv="X-XRDS-Location" content="http://<%= sitename %>/xrds"/>
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<title><%= title %><%= (not @scaffold_title.nil?) ? " - " + @scaffold_title : "" %></title>
+	<script type="text/javascript" src="/scaffold_associations_tree.js"></script>
+	<script type="text/javascript" src="/paging.js"></script>
+	<script type="text/javascript" src="/sorttable.js"></script>
+	<script type="text/javascript" src="/open/rounded.js"></script> <!-- http://www.editsite.net/blog/rounded_corners.html -->
+	<link rel="stylesheet" type="text/css" href="/scaffold_associations_tree.css">
+<style type="text/css">
+/* === Layout ================================================== */
+body,
+html {
+	margin:0;
+	padding:0;
+	color:#1F5A7A;
+	background:<%= cc(0) %>;
+    font: normal .9em/1.6em Verdana, Arial, sans-serif;
+}
+
+a { color: #1F5A7A; }
+a:visited { color: #1F5A7A; }
+ul {list-style-type:square; list-style-position:outside;padding:0 0 0 15px;}
+
+h1 {
+    margin:0;
+    font: bold 1.5em/1.75em Verdana, Arial, sans-serif;
+}
+#header {
+	margin: 0 0 10px 0;
+}
+#left { 
+	float:left;
+	width:200px;
+	padding:8px;
+	background-color:<%= cc(0) %>;
+}
+#right { 
+	display: none;
+	float:right;
+	width:200px;
+	/* padding:80px 8px 8px 8px; mit stern */
+	padding:8px;
+	background-color:<%= cc(0) %>; 
+}
+#center { 
+/*	margin: 0 220px 10px 220px; */
+	margin: 0 0px 10px 220px;
+	min-height: 350px;
+	padding:8px;
+	background-color:<%= @cb %>; 
+/*	border-right: 1px solid; */
+/*	border-left: 1px solid; */
+}
+#footer { 
+	clear:both;
+	background-color:<%= cc(0) %>;
+	padding:8px; 
+}
+
+/* === Autocomplete =============================================== */	
+div.habtm_ajax_remove_associations form { 
+	display: inline; 
+}
+div.auto_complete {
+	width: 350px;
+	background: <%= cc(0) %>;
+}
+div.auto_complete ul {
+	border:1px solid #888;
+	margin:0;
+	padding:0;
+	width:100%;
+	list-style-type:none;
+}
+div.auto_complete ul li {
+	margin:0;
+	padding:3px;
+}
+div.auto_complete ul li.selected { 
+	background-color: #ffb; 
+}
+div.auto_complete ul strong.highlight { 
+	color: #800; 
+	margin:0;
+	padding:0;
+}
+ul.se_autocomplete {
+	position: absolute;
+	overflow: hidden;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	margin: 0px;
+	padding: 0;
+	list-style: none;
+	font: normal .75em/.75em Verdana, Arial, sans-serif;
+	color: #333;
+}
+ul.se_autocomplete li {
+	display: block;
+	padding: .3em .5em .3em .3em;
+	overflow: hidden;
+	width: 100%;
+}
+ul.se_autocomplete li.active {
+	background-color: #3875d7;
+	color: #fff;
+}
+
+/* === Gradient 4 - Metallic Header ===================================== */
+.kopf {
+	/* background-color:<%= cc(1) %>; /**/
+}
+.kopf h1 {
+	font: normal 340%/100% Georgia, "Lucida Grande", Arial, sans-serif;
+	/* position: relative;*/
+	margin: 0;
+	line-height: 100px;
+	vertical-align: middle;
+}
+
+.kopf a{text-decoration:none;}
+.kopf a:visited{text-decoration:none;}
+/* === Gradient 4 - Metallic Header ===================================== */
+.gradient4 {
+	display:none;
+	background: #000; /*url(/images/gradient4-bg.png) repeat-x left bottom;*/
+	padding: 15px 0 10px 10px;
+	/* margin: 0px 0 50px;*/
+}
+.gradient4 h1 {
+	font: normal 340%/100% Georgia, "Lucida Grande", Arial, sans-serif;
+	position: relative;
+	margin: 0;
+	color: #fff;
+}
+.gradient4 h2 {
+	font: normal 150%/100% "Lucida Grande", Arial, sans-serif;
+	margin: 10px 0 0;
+	color: #b7b7b7;
+}
+.gradient4 span {
+	background: url(/images/gradient-dark.png) repeat-x;
+	position: absolute;
+	bottom: -0.1em;
+	display: block;
+	width: 100%;
+	height: 27px;
+}
+
+/* === Diverse ... ================================================ */
+.pg-normal {
+    color: black;
+    font-weight: normal;
+    text-decoration: none;    
+    cursor: pointer;    
+}
+.pg-selected {
+    color: black;
+    font-weight: bold;        
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* located in demo.css and creates a little calendar icon
+ * instead of a text link for "Choose date"
+ */
+a.dp-choose-date {
+	float: left;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	margin: 5px 3px 0;
+	display: block;
+	text-indent: -2000px;
+	overflow: hidden;
+	background: url(/images/calendar.png) no-repeat; 
+}
+a.dp-choose-date.dp-disabled {
+	background-position: 0 -20px;
+	cursor: default;
+}
+/* makes the input field shorter once the date picker code
+ * has run (to allow space for the calendar icon
+ */
+input.dp-applied {
+	width: 140px;
+	float: left;
+}
+
+a img { 
+	border: none; 
+}
+
+input.btn { 
+	color:#ddd; 
+/*	font: bold 84% 'trebuchet ms',helvetica,sans-serif;*/
+	padding:5px;
+	margin:2px;
+	border:1px solid #ddd; 
+	background-color:#1F5A7A; 
+} 
+
+.flash {
+	/* color: black; */
+	background: <%= cc(3) %>;
+	/* border: 5px solid #bbb; /**/
+	font-weight:bold;
+}
+	
+.help { 
+	display: none;
+	background: <%= cc(5) %>;
+/*	border-width:1px;
+	border-style:solid; 
+	padding:1.2em; */
+}
+
+.helpvis { 
+	background: #C3D6EC;
+	/* border-width:1px;
+	border-style:solid;
+	padding:1.2em; */
+}
+
+.ozo {background:#ddd;border-bottom: 1px solid #eee;border-top: 1px solid #eee;}
+.oze {background:#ddd;border-bottom: 1px solid #eee;border-top: 1px solid #eee;}
+
+</style>
+<!--[if lt IE 7]>
+<style>
+.gradient-ie h1 span {
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/gradient-white.png', sizingMethod='scale');
+}
+</style>
+<![endif]-->
+<style>
+.star {color: red; }
+.rectbl{background: #ddd;} 
+.recval{background: #fff;}
+</style>
+<script>
+function toggleLayer( whichLayer )
+{
+  var elem, vis;
+  if( document.getElementById ) // this is the way the standards work
+    elem = document.getElementById( whichLayer );
+  else if( document.all ) // this is the way old msie versions work
+      elem = document.all[whichLayer];
+  else if( document.layers ) // this is the way nn4 works
+    elem = document.layers[whichLayer];
+  vis = elem.style;
+  // if the style.display value is blank we try to figure it out here
+  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+}
+
+var ablauf = new Date();
+var ablauflen = ablauf.getTime() + (24 * 60 * 60 * 1000);
+ablauf.setTime(ablauflen);
+var d = new Date();
+document.cookie = "TZ=" + d.getTimezoneOffset() + "; expires=" + ablauf.toGMTString();
+</script>
+
+</head>
+	<body>
+		<div id="header" class="gradient4">
+			<!--h1><span></span><%= title %><small>(<%= version %> )</small></h1-->
+			<a href="/text/index"><h1><span></span><%= title %><small>(<%= version %> )</small></h1></a>
+			<!--h2>Doesn't this look cooler than Web 2.0?</h2-->
+			<!--img src="/images/alphastar.jpg" style="position:fixed; right:225px; top:75px;"/-->
+		</div>
+		<div class="kopf" >
+			<!-- http://commons.wikimedia.org/wiki/File:Sextant.png -->
+			<img alt="Pic CC by Joaquim Alves Gaspar" src="/images/60px-Sextant2.png" width="60" height="60" style="float:left;padding:20px"/>
+			<a href="http://web.piratenpartei.de/" target="_blank">
+			<img src="/images/800px-Logopiraten3_smalll.png" style="float:right;padding:20px"/>
+			</a>
+			<!--img src="/images/logonds.jpg" style="float:right;padding:20px"/-->
+			<a href="/text/index"><h1><%= title %><small>(<%= version %> )</small></h1></a>
+		</div>
+		<div id="left">
+			<%= partial :login %>
+		</div>
+		<div id="right">
+			<%= partial :context %>
+		</div>
+		<div id="center">
+			<% if flash[:notice] %>
+				<div class="rounded flash"><div style="padding:5px;"><%= flash[:notice] %>
+				</div></div><br> <% end %>
+			<% flash.clear %>
+			<div class="rounded" style="background:<%= cc(6) %>;"><div style="padding:5px;">
+			<%= "<h1>#{@scaffold_title}</h1>" if @scaffold_title %>
+			<%= yield %></div></div>
+			<% @scaffold_title = nil %>
+
+			
+		</div>
+		<div id="footer">
+			<center><small>
+				<%= $tn.strftime("Es ist jetzt %H:%M:%S am %d.%m.%Y") %>	
+				&nbsp;-&nbsp;
+				<a href="/adminlogin" >Admin</a>
+				&nbsp;-&nbsp;
+				<a href="/text/impressum">Impressum</a>
+				&nbsp;-&nbsp;
+				<a href="mailto:pp.sextant@googlemail.com">Kontakt</a>
+			</small></center>
+		</div>
+		<script type="text/javascript" src="/scaffold_form_focus.js"></script>
+		<%#= ENV.inspect%>
+		<script type="text/javascript">
+Rounded('rounded', 10, 10);
+</script> 		
+	</body>
+</html>

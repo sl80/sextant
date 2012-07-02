@@ -1,0 +1,35 @@
+h1. Was ist der Piraten-Sextant?
+
+Der Piraten-Sextant ist ein Tool zur elektronischen Erstellung von unverbindlichen Meinungsbildern. Er ist der Versuch eines Kompromisses: Einerseits stehen Piraten elektronischen _Wahlen_ skeptisch gegenüber, andererseits ist _Liquid Democracy_ ohne technische Infrastrukturen nicht denkbar.
+
+Der Piraten-Sextant **ist nicht ...**
+* ein ausgewachsenes Liquid-Democracy-System (keine Delegation)
+* eine Diskussionsplattform
+
+Der Piraten-Sextant **ist ...**
+* eine Plattform zur Sammlung von Vorschlägen mit anschließender Abstimmung
+* sehr einfach zu bedienen (Wir müssen _alle_ Piraten auf dem Weg zur _Liquid Democracy_ mitnehmen.)
+* "mandantenfähig", d.h. in mehreren Organisationseinheiten (LV , KV ...) parallel einsetzbar und administrierbar
+* frei von personenbezogenen Daten. Die Benutzerverwaltung erfolgt über einen OpenID-Server des Vorstands.
+
+h1. Anmeldung
+
+<%= helptext(11) %>
+
+h1. Phase I - Sammlung
+
+<%= helptext(1) %>
+
+h1. Phase II - Abstimmung
+
+<%= helptext(2) %>
+
+h1. Die Auswertung
+
+<%= helptext(6) %>
+
+h1. Abgeschlossene Meinungsbilder
+
+<%= helptext(3) %>
+
+

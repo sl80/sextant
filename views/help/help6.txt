@@ -1,0 +1,1 @@
+Um technisch die Nachvollziehbarkeit der Auswertung zu gewährleisten, ist es möglich, die Rohdaten eines Meinungsbildes (Optionen und Meinungen) als CSV-Datei zu exportieren. Diese Daten erlauben dir zwar, zu kontrollieren, ob deine Stimme richtig gezählt wurde und ob der Sextant richtig gerechnet hat, sie lassen aber keinen Rückschluss auf die Meinungen anderer Piraten zu.

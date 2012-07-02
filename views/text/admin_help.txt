@@ -1,0 +1,29 @@
+h1. Verwalten von Meinungsbildern
+
+<%= helptext(10) %>
+
+h1. Feld: Phase
+
+<%= helptext(7) %>
+
+h1. Feld: Bereich
+
+<%= helptext(8) %>
+
+h1. Feld: YAML
+
+<%= helptext(9) %>
+
+
+
+
+<%# config = {
+	:server=>'imap.gmail.com', 
+	:port=>'993', 
+	:username=>'linnaeus.mail', 
+	:fullusername=>'linnaeus.mail@googlemail.com', 
+	:password=>'mail4lin'
+}
+SGmail.getenvelopes(config) do |e| %><%#= "* #{e.subject}" %>
+<%# end %>
+

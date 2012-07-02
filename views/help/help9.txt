@@ -1,0 +1,20 @@
+Das Gerüst des Meinungsbild ist im "YAML-Format":http://de.wikipedia.org/wiki/YAML geschrieben, um damit möglichst flexibel zu sein. Die Top-Level-Variablen sind
+* "approvot": Optional. Schaltet auf "Wahl durch Zustimmung" um. "punkte" wird in diesem Fall ignoriert. 
+* "paging": Optional. Gibt, wenn vorhanden, die Zeilenzahl des Blätterers an. 
+* "punkte": Die Anzahl der in der Abstimmung zu verteilenden Punkte
+* "text": Hier steht ggf. der Vortext, der über den Optionen in dem grauen Kasten erscheint
+* "email": Optional. Mailadresse des Initiators für Rückfragen etc.
+* "verdeckt": Optional. Unterbindet Anzeige des Ergebnisses während der Abstimmung
+* "themen": Ab hier beginnt die Liste der Optionen, die jeweils einzeilig, eingerückt und am Anfang mit einem "-" markiert sind.
+
+**Häufige Konfigurationsfehler**
+* Wenn im Text nach "text" ein Doppelpunkt auftaucht, dann muß der ganze Text in Doublequotes gesetzt werden.
+* Wenn im Text nach "text" Doublequotes verwendet werden, sollten diese durch Singlequotes ersetzt werden.
+
+Ein Sonderfall unter den Optionen sind Zeilen, die mit "h." beginnen. Diese werden als Zwischenüberschriften ausgegeben und können bei Bedarf zur Gliederung größerer Optionsblöcke dienen.
+
+Um ein neues Meinungsbild möglichst einfach zu erstellen, füllt der Button "Vorlage" das YAML-Feld mit einem vollständigen Gerüst, das danach einfach verändert werden kann.
+
+**Hinweis:** Web- und Mailadressen werden automatisch in gültige URLs umgewandelt. Wenn also zu einer Umfrage oder Option weitere Informationen nötig sind, dann kann man einfach mit einer URL (am besten einer Kurzurl wie z.B. http://bit.ly/aBcD56) darauf verweisen.
+
+**ACHTUNG!** Nach der ersten Stimmabgabe in Phase 2 dürfen die Optionen nicht mehr ergänzt oder in ihrer Reihenfolge verändert werden!

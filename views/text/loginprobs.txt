@@ -1,0 +1,14 @@
+h1. Probleme beim Login?
+
+# **"Falsches Passwort"**
+Beim Übertragen von ID und Passwort per Cut & Paste aus der Email mit den Anmeldedaten ist es verschiedentlich passiert, daß Leerzeichen oder der Punkt nach dem Passwort mitkopiert wurden.
+# **Kein Fehler bei der Anmeldung, trotzdem sagt der Sextant "Nicht angemeldet"**
+Der Sextant legt mit der Anmeldung deine Sitzungsdaten in einem Cookie ab. Daher müssen Cookies im Browser aktiviert sein.
+# **Sonderfall "Opera"**
+Für Opera müssen ggf. auch die seitenspezifischen Einstellungen auf "Durchzug" gestellt sein, damit er Cookies, Referrer, Javascript, Pop-ups etc. akzeptiert.
+# **Ich habe gar keine Anmeldedaten**
+Es ist sowohl vorgekommen, daß die Mail mit den Anmeldedaten in der Flut der Piraten-Mail einfach übersehen wurde, als auch, daß sie unbemerkt in einem Spamfilter hängengeblieben ist. Bitte durchsuch dein Postfach noch einmal nach den Anmeldedaten. Solltest du nicht fündig werden, wende dich bitte an deinen zuständigen Landesvorstand.
+# **Ich habe mit Firefox und __NoScript__ Probleme beim OpenID-Login (Nds.)**
+Die Firefox-Erweiterung __NoScript__ hält die Kommunikation zwischen dem OpenID-Server des Vorstands und dem Piraten-Sextanten fälschlicherweise für eine Cross-Site-Scripting (XSS) Sicherheitsproblem. Bitte deaktiviere __NoScript__ für __http://openid.piratenvorort.de__ und __http://pp-sextant.heroku.de__ und gib __^http://openid.piratenvorort.de__ in der XSS-Konfiguration als Ausnahme an. 
+# **Ich habe meine OpenID / mein Passwort vergessen :-(**
+Bitte wende dich an das Vorstandsmitglied, das die Mitgliederverwaltung betreut.

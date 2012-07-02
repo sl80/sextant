@@ -1,0 +1,24 @@
+<h1>Profil für "<%= @u.name %>"</h1>
+
+<form action="/admin_profile_save" method="POST">
+	<input name="u" type="hidden" value="<%= @u.id %>"/>
+	<table>
+	<tr>
+		<td>Name:</td>
+		<td><input name="longname" value='<%= @u.longname %>' size=35/></td>
+	</tr><!--tr>
+		<td>Email:</td>
+		<td><input name="email" value='<%= @u.email %>' size=35/></td>
+	</tr--><tr>
+		<td>Neues Passwort:</td>
+		<td><input name="pw1" value='' size=35/></td>
+	</tr><tr>
+		<td>(Wiederholung)</td>
+		<td><input name="pw2" value='' size=35/></td>
+	</tr><tr>
+		<td>Bereich(e):</td>
+		<td><%= @u.acl %></td>
+	</tr
+	</table>
+	<input type="submit" value="Speichern"/>
+</form>

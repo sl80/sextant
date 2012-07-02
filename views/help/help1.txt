@@ -1,0 +1,3 @@
+Für eine neue Umfrage haben die Initiatoren möglicherweise bereits einige Optionen vorgegeben. Solange sich die Umfrage in _Phase I - Sammlung_ befindet, kannst du die Optionen jederzeit erweitern. Nach Abschluß der Sammlung wird das betreuende Team die Optionen redaktionell bearbeiten, um Dubletten auszuschließen und ggf. Cluster zu bilden.
+
+**Hinweis:** Web- und Mailadressen werden automatisch in gültige URLs umgewandelt. Wenn also zu einer Umfrage oder Option weitere Informationen nötig sind, dann kann man einfach mit einer URL (am besten einer Kurzurl wie z.B. http://bit.ly/aBcD56) darauf verweisen.

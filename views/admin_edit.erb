@@ -1,0 +1,33 @@
+<script>
+function mksmplyml() {
+	var o = document.getElementsByName("topics_yml");
+	if (confirm("Inhalt dieser Umfrage wirklich mit Beispieldaten überschreiben?")) {
+	o[0].value = "---\napprovot: 1\npaging: 5\npunkte: 5\ntext: Hier kommt die ausführliche Beschreibung des Meinungsbildes\nemail: ich@irgend.wo\nverdeckt: 1\nthemen:\n" +
+				 "- Option 1\n- h. Kleine Zwischenüberschrift\n- Option 2\n- Option 3\n";
+  }
+}
+</script>	
+	<form action="/admin_save" method="POST">
+		<input name="q" type="hidden" value="<%= @q.id if not @q.nil? %>"/>
+<table>
+	<tr>
+		<td>Titel:</td><td><input name="name" value='<%= @q.name if not @q.nil? %>' size=35/></td>
+	</tr><tr>
+		<td valign=TOP>Phase:</td>
+		<td valign=TOP><input name="phase" value='<%= @q.phase if not @q.nil? %>' size=3/><%= help(7) %>
+			<div id="help7" class="help"><%= helptext(7) %></div>
+		</td>
+	</tr><tr>
+		<td valign=TOP>Bereich:</td>
+		<td valign=TOP><input name="scope" value='<%= @q.scope if not @q.nil? %>' size=9/><%= help(8) %>
+			<div id="help8" class="help"><%= helptext(8) %></div>
+		</td>
+	</tr><tr>
+		<td valign=TOP>YAML:<br><input type="button" onclick="javascript:mksmplyml();" value="Vorlage"/></td>
+		<td valign=TOP>
+			<textarea cols="55" rows="10" name="topics_yml"><%= @q.topics_yml if not @q.nil? %>	</textarea><%= help(9) %><div id="help9" class="help"><%= helptext(9) %></div>
+		</td>
+	</tr>
+</table>
+		<input type="submit" value="Speichern"/>
+	</form>

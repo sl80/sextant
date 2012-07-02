@@ -1,0 +1,49 @@
+<html>
+<!--ddiv style="background: #ffc;border-width:1px;border-style:solid;padding:1.2em;
+width: 700px ;
+  margin-left: auto ;
+  margin-right: auto ;
+
+"/-->
+<head>
+	<title>Oooops!</title>
+	
+	<style type="text/css">
+	    body, html {
+        height:100%; /*fill the viewport*/
+        background-color:#336;
+        color:#555;
+        font-family: Arial, Helvetica, sans-serif; font-size: 24px;
+    }
+
+	
+		#outer {height: 400px; overflow: hidden; position: relative; width: 100%;}
+		#outer[id] {display: table; position: static;}
+		
+		#middle {position: absolute; top: 50%; width: 100%; text-align: center;} /* for explorer only*/
+		#middle[id] {display: table-cell; vertical-align: middle; position: static;}
+		
+		#inner {position: relative; top: -50%; text-align: left;
+			background-color:#6cf;border-width:10px;border-style:solid;border-color:#9ff;} /* for explorer only */
+		#inner {width: 400px; margin-left: auto; margin-right: auto;
+			background-color:#6cf;border-width:10px;border-style:solid;border-color:#9ff;} /* for all browsers*/
+		/* optional: #inner[id] {position: static;} */
+		
+	</style>
+</head>
+
+<body>
+<div id="outer" class="greenBorder">
+	<div id="middle">
+
+		<div id="inner" class="greenBorder">
+			<center>
+			<large><b>Ooooops!</b></large><p/><p/>
+			Der Sextanten-Admin ist benachrichtigt und k&uuml;mmert sich drum.<p/>
+			Zur&uuml;ck zur <a href="/text/index">Startseite</a>
+			</center>
+		</div>
+	</div>
+</div>
+</body>
+</html>
